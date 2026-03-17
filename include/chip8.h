@@ -1,26 +1,30 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #define SCREEN_WIDTH 64
 #define SCREEN_HEIGHT 32
-#define START_ADRESS 0x200
+
 
 //Func prototypes
 void init_CHIP8();
+bool loadROM();
+void cycle();
 
-
-uint8_t memory[4096]; // RAM 4KB(4096 bytes)
-uint8_t V[16]; // REGISTERS
+uint16_t opp;
+uint8_t memory[4096]; // 4KB(4096 bytes)
+uint8_t V[16]; // 16 REGISTERS
 uint16_t I;
 uint16_t PC; // program counter
+uint16_t opcode; // curr opcode 
 uint8_t SP; //topmost lvl of the stack
 
 
-//uint8_t delay_timer;
-//uint8_t sound_timer;
+uint8_t delay_timer;
+uint8_t sound_timer;
 
-uint8_t display[SCREEN_WIDTH*SCREEN_HEIGHT];
+uint8_t display[SCREEN_WIDTH*SCREEN_HEIGHT]; // screen size(64x32)                              
 
 uint16_t stack[16];
 
