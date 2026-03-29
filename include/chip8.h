@@ -10,9 +10,9 @@
 //Func prototypes
 void init_CHIP8();
 bool loadROM();
-void cycle();
+void fetch();
+void execute();
 
-uint16_t opp;
 uint8_t memory[4096]; // 4KB(4096 bytes)
 uint8_t V[16]; // 16 REGISTERS
 uint16_t I;
@@ -49,3 +49,4 @@ uint8_t fontset[80] =
 };
 
 uint8_t keyboard[16];
+bool drawFlag;
