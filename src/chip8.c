@@ -57,6 +57,7 @@ void execute(){
 	{
 	case 0x0000: // 00E0
 		memset(display, 0, sizeof(display));
+		drawFlag = true;
 		break;
 	
 	case 0x1000: // 1NNN
@@ -101,7 +102,30 @@ void execute(){
 
 		break;
 	case 0xD000: // DXYN
+		uint16_t x = V[(opcode & 0x0F00) >> 8];
+		uint16_t y = V[(opcode & 0x00F0) >> 4];
+		uint16_t height = (opcode & 0x000F);
+		uint8_t pixel;
+		V[15] = 0; // VF Register (last in V[16])
+
+		for(int i=0; i<height; i++)
+		{
+			pixel = memory[I + i];
+			for (int j=0; j<8; j++)
+			{
+				if ((pixel & (0x80 >> j)) != 0)
+				{	
+					if (display[((y+i)*64+(x+j))] == 1)
+					{
+						V[15] = 1;
+ 					}
+					display[((y+i)*64+(x+j))] ^= 1;
+				}
+				
+			}
+		}
 		
+		drawFlag = true;
 		break;
 	
 	case 0xE000: // EX__
