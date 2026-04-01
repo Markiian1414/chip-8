@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
+#include <string.h>
 #include "chip8.h"
 
 void init_CHIP8(){
@@ -129,8 +129,21 @@ void execute(){
 		break;
 	
 	case 0xE000: // EX__
-
-		break;
+		switch (opcode & 0x00FF)
+		{
+		case 0x009E:
+			if(keyboard[V[(opcode & 0x0F00) >> 8]] != 0)
+			{
+				PC += 2;
+			}
+			break;
+		case 0x00A1:
+			if(keyboard[V[(opcode & 0x0F00) >> 8]] == 0)
+			{
+				PC += 2;
+			}
+			break;
+		
 	case 0xF000: // FX__
 
 		break;
