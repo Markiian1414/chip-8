@@ -19,7 +19,7 @@ uint16_t I;
 uint16_t PC; // program counter
 uint16_t opcode; // curr opcode 
 uint8_t SP; //topmost lvl of the stack
-
+ 
 
 uint8_t delay_timer;
 uint8_t sound_timer;

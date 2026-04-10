@@ -143,12 +143,17 @@ void execute(){
 				PC += 2;
 			}
 			break;
-		
+		}
 	case 0xF000: // FX__
-
-		break;
-	
-	default:
-		break;
+		switch (opcode & 0x00FF)
+		{
+		case 0x0007:
+			V[(opcode & 0x0F00) >> 8] = delay_timer;
+			break;
+		
+		case 0x0015:
+			delay_timer = V[(opcode & 0x0F00) >> 8];
+			break;
+		}
 	}
 }
