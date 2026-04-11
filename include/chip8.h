@@ -6,47 +6,31 @@
 #define SCREEN_WIDTH 64
 #define SCREEN_HEIGHT 32
 
+typedef struct{
+	uint8_t memory[4096]; // 4KB(4096 bytes)
+	uint8_t V[16]; // 16 REGISTERS
+	uint16_t I;
+	uint16_t PC; // program counter
+	uint16_t opcode; // curr opcode 
+	uint8_t SP; //topmost lvl of the stack
+	
+
+	uint8_t delay_timer;
+	uint8_t sound_timer;
+
+	uint8_t display[SCREEN_WIDTH*SCREEN_HEIGHT]; // screen size(64x32)                              
+
+	uint16_t stack[16];
+
+	uint8_t fontset[80];
+
+	uint8_t keyboard[16];
+	bool drawFlag;
+} Chip8;
 
 //Func prototypes
-void init_CHIP8();
-bool loadROM();
-void fetch();
-void execute();
+void init_CHIP8(Chip8 *c8);
+bool loadROM(Chip8 *c8,const char* file);
+void fetch(Chip8 *c8);
+void execute(Chip8 *c8);
 
-uint8_t memory[4096]; // 4KB(4096 bytes)
-uint8_t V[16]; // 16 REGISTERS
-uint16_t I;
-uint16_t PC; // program counter
-uint16_t opcode; // curr opcode 
-uint8_t SP; //topmost lvl of the stack
- 
-
-uint8_t delay_timer;
-uint8_t sound_timer;
-
-uint8_t display[SCREEN_WIDTH*SCREEN_HEIGHT]; // screen size(64x32)                              
-
-uint16_t stack[16];
-
-uint8_t fontset[80] =
-{
-	0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
-	0x20, 0x60, 0x20, 0x20, 0x70, // 1
-	0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
-	0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
-	0x90, 0x90, 0xF0, 0x10, 0x10, // 4
-	0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
-	0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
-	0xF0, 0x10, 0x20, 0x40, 0x40, // 7
-	0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
-	0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
-	0xF0, 0x90, 0xF0, 0x90, 0x90, // A
-	0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
-	0xF0, 0x80, 0x80, 0x80, 0xF0, // C
-	0xE0, 0x90, 0x90, 0x90, 0xE0, // D
-	0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
-	0xF0, 0x80, 0xF0, 0x80, 0x80  // F
-};
-
-uint8_t keyboard[16];
-bool drawFlag;

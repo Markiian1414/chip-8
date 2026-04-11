@@ -8,14 +8,16 @@
 
 int main(int argc, char **argv){ //argument count; argument vector
     
+    Chip8 c8;
+
     if (argc < 2){
         printf("Error. ");
         return 1;
     }
 
     //Initialize of CHIP8 and load ROM into memory
-    init_CHIP8();
-    if(!loadROM(argv[1]))
+    init_CHIP8(&c8);
+    if(!loadROM(&c8, argv[1]))
     {
         return 1;
     }
@@ -42,75 +44,77 @@ int main(int argc, char **argv){ //argument count; argument vector
         {
             if(event.type == SDL_QUIT) running = 0;
 
-            if(event.type == SDL_KEYDOWN || SDL_KEYUP){
+            if(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP){
                 int pressed = (event.type == SDL_KEYDOWN) ? 1 : 0;
                 
                 switch (event.key.keysym.sym)
                 {
                     case SDLK_1:
-                        keyboard[1]=pressed;
+                        c8.keyboard[0x1]=pressed;
                         break;
                     case SDLK_2:
-                        keyboard[2]=pressed;
+                        c8.keyboard[0x2]=pressed;
                         break;
                     case SDLK_3:
-                        keyboard[3]=pressed;
+                        c8.keyboard[0x3]=pressed;
                         break;
                     case SDLK_4:
-                        keyboard[0xC]=pressed;
+                        c8.keyboard[0xC]=pressed;
                         break;
                     case SDLK_q:
-                        keyboard[4]=pressed;
+                        c8.keyboard[0x4]=pressed;
                         break;
                     case SDLK_w:
-                        keyboard[5]=pressed;
+                        c8.keyboard[0x5]=pressed;
                         break;
                     case SDLK_e:
-                        keyboard[6]=pressed;
+                        c8.keyboard[0x6]=pressed;
                         break;
                     case SDLK_r:
-                        keyboard[0xD]=pressed;
+                        c8.keyboard[0xD]=pressed;
                         break;
                     case SDLK_a:
-                        keyboard[7]=pressed;
+                        c8.keyboard[0x7]=pressed;
                         break;
                     case SDLK_s:
-                        keyboard[8]=pressed;
+                        c8.keyboard[0x8]=pressed;
                         break;
                     case SDLK_d:
-                        keyboard[9]=pressed;
+                        c8.keyboard[0x9]=pressed;
                         break;
                     case SDLK_f:
-                        keyboard[0xF]=pressed;
+                        c8.keyboard[0xE]=pressed;
                         break;
                     case SDLK_z:
-                        keyboard[0xA]=pressed;
+                        c8.keyboard[0xA]=pressed;
                         break;
                     case SDLK_x:
-                        keyboard[0x0]=pressed;
+                        c8.keyboard[0x0]=pressed;
                         break;
                     case SDLK_c:
-                        keyboard[0xB]=pressed;
+                        c8.keyboard[0xB]=pressed;
                         break;
                     case SDLK_v:
-                        keyboard[0xF]=pressed;
+                        c8.keyboard[0xF]=pressed;
                         break;
                 }
             }    
         }
     
 
-    fetch();
-    execute();
+    for(int i = 0; i < 10; i++) {
+        fetch(&c8);
+        execute(&c8);
+    }
 
-    if(drawFlag) {
+    if(c8.drawFlag) {
             SDL_SetRenderDrawColor(renderer, 0,0,0,255);
             SDL_RenderClear(renderer);
 
             SDL_SetRenderDrawColor(renderer, 255,255,255,255);
             for(int y=0; y<SCREEN_HEIGHT; y++) {
                 for(int x=0; x<SCREEN_WIDTH; x++) {
-                    if(display[y*SCREEN_WIDTH + x]) {
+                    if(c8.display[y*SCREEN_WIDTH + x]) {
                         SDL_Rect pixel = {x*10, y*10,
                                           10, 10};
                         SDL_RenderFillRect(renderer, &pixel);
@@ -119,7 +123,7 @@ int main(int argc, char **argv){ //argument count; argument vector
             }
 
             SDL_RenderPresent(renderer);
-            drawFlag = false;
+            c8.drawFlag = false;
         }
     }
 
